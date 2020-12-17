@@ -1,24 +1,26 @@
 package com.moviesapp.movies.assembler;
 
 import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 
 import java.util.Date;
 
+@Relation(collectionRelation = "movies", itemRelation = "movie")
 public class MovieModel extends RepresentationModel<MovieModel> {
 
-    private Long id;
+    private Long movieId;
     private String title;
     private Date releaseDate;
 
     public MovieModel() {
 
     }
-    public Long getId() {
-        return id;
+    public Long getMovieId() {
+        return movieId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setMovieId(Long movieId) {
+        this.movieId = movieId;
     }
 
     public String getTitle() {

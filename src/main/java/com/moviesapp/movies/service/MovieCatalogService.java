@@ -10,6 +10,10 @@ public interface MovieCatalogService {
 
     Movie getMovie(Long id);
 
+    Movie getMovieByTitle(String title);
+
     Movie renameMovie(Long movieId, String newTitle);
+
+    Movie newMovie(Movie movie);
 
 }

@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: martin.flores
+      changes:
+        - createTable:
+            tableName: movie
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: release_date
+                  type: timestamp
+                  constraints:
+                    - nullable: false
+  - changeSet:
+      id: 2
+      author: martin.flores
+      changes:
+        - createIndex:
+            catalogName: moviecatalog
+            tableName: movie
+            indexName: idx_movie_title
+            columns:
+              - column:
+                    name: title

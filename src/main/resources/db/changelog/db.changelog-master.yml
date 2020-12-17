@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - preConditions:
+      - runningAs:
+          username: lbmovieapi_user
+
+  - include:
+      file: db/changelog/db.changelog-1.0.0.yml
+  - include:
+      file: db/changelog/db.test-data.yml

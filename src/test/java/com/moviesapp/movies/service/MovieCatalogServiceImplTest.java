@@ -4,6 +4,7 @@ import com.moviesapp.movies.repository.MovieRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -24,7 +25,7 @@ public class MovieCatalogServiceImplTest {
     MovieRepository movieRepository;
 
     @InjectMocks
-    MovieCatalogServiceImpl movieService;
+    MovieCatalogServiceImpl movieCatalogService;
 
     @Test
     void getAllMovieCatalog() throws Exception {
@@ -34,7 +35,7 @@ public class MovieCatalogServiceImplTest {
                 mock(Movie.class)
         ));
 
-        var actual = this.movieService.getAllMovieCatalog();
+        var actual = this.movieCatalogService.getAllMovieCatalog();
 
         verify(this.movieRepository, times(1)).findAll();
 
@@ -55,7 +56,7 @@ public class MovieCatalogServiceImplTest {
         given(this.movieRepository.findById(anyLong())).willReturn(Optional.of(originalMovie));
         given(this.movieRepository.save(any(Movie.class))).willReturn(movieWithNewName);
 
-        Movie renamedMovie = this.movieService.renameMovie(1L, "Star Trek");
+        Movie renamedMovie = this.movieCatalogService.renameMovie(1L, "Star Trek");
 
         verify(this.movieRepository, times(1)).findById(1L);
         verify(this.movieRepository, times(1)).save(any(Movie.class));
@@ -71,7 +72,7 @@ public class MovieCatalogServiceImplTest {
         given(originalMovie.getTitle()).willReturn("Star Wars");
         given(this.movieRepository.findById(anyLong())).willReturn(Optional.of(originalMovie));
 
-        Movie renamedMovie = this.movieService.renameMovie(1L, "Star Wars");
+        Movie renamedMovie = this.movieCatalogService.renameMovie(1L, "Star Wars");
 
         verify(this.movieRepository, times(1)).findById(1L);
         verifyNoMoreInteractions(this.movieRepository);
@@ -85,11 +86,53 @@ public class MovieCatalogServiceImplTest {
         given(this.movieRepository.findById(anyLong())).willReturn(Optional.empty());
 
         var ex = Assertions.assertThrows(NoSuchElementException.class, () -> {
-            this.movieService.renameMovie(1L, "Star Wars");
+            this.movieCatalogService.renameMovie(1L, "Star Wars");
         });
 
         verify(this.movieRepository, times(1)).findById(1L);
         verifyNoMoreInteractions(this.movieRepository);
+    }
+
+    @Test
+    void storeNewMovie() throws Exception {
+
+        Movie movie = mock(Movie.class);
+        Movie newMovie = mock(Movie.class);
+        ArgumentCaptor<Movie> movieArg = ArgumentCaptor.forClass(Movie.class);
+
+        given(movie.getTitle()).willReturn("Guardians of the Galaxy");
+        given(this.movieRepository.findMovieByTitle(anyString())).willReturn(Optional.empty());
+        given(this.movieRepository.save(any(Movie.class))).willReturn(newMovie);
+
+        Movie actual = this.movieCatalogService.newMovie(movie);
+
+        verify(movie, times(1)).getTitle();
+        verify(this.movieRepository, times(1)).findMovieByTitle(movie.getTitle());
+        verify(this.movieRepository, times(1)).save(movieArg.capture());
+
+        assertThat(movieArg.getValue()).isSameAs(movie);
+        assertThat(actual).isEqualTo(newMovie);
+    }
+
+    @Test
+    void storeNewMovie_whenTitleAlreadyExists_thenDontStore() throws Exception {
+        String title = "Guardians of the Galaxy";
+        Movie movie = mock(Movie.class);
+        ArgumentCaptor<String> titleArg = ArgumentCaptor.forClass(String.class);
+
+        given(movie.getTitle()).willReturn(title);
+        given(this.movieRepository.findMovieByTitle(anyString())).willReturn(Optional.of(movie));
+
+        var ex = Assertions.assertThrows(Exception.class, () -> {
+            this.movieCatalogService.newMovie(movie);
+        });
+
+        verify(movie, times(2)).getTitle();
+        verify(this.movieRepository, times(1)).findMovieByTitle(titleArg.capture());
+        verifyNoMoreInteractions(this.movieRepository);
+
+        assertThat(titleArg.getValue()).isSameAs(title);
+        assertThat(ex.getMessage()).isEqualTo("Movie with title: "+ title +" already exists");
     }
 
 }

@@ -3,7 +3,6 @@ package com.moviesapp.movies.assembler;
 import com.moviesapp.movies.controller.MovieCatalogController;
 import com.moviesapp.movies.entity.Movie;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.mediatype.hal.HalModelBuilder;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +19,7 @@ public class MovieModelAssembler extends RepresentationModelAssemblerSupport<Mov
     public MovieModel toModel(Movie movie) {
 
         MovieModel model = new MovieModel();
-        model.setId(movie.getId());
+        model.setMovieId(movie.getId());
         model.setTitle(movie.getTitle());
         model.setReleaseDate(movie.getReleaseDate());
         model.add(linkTo(methodOn(MovieCatalogController.class).getMovie(movie.getId())).withSelfRel());
@@ -30,6 +29,8 @@ public class MovieModelAssembler extends RepresentationModelAssemblerSupport<Mov
 
     @Override
     public CollectionModel<MovieModel> toCollectionModel(Iterable<? extends Movie> entities) {
-        return super.toCollectionModel(entities);
+        var models = super.toCollectionModel(entities);
+        models.add(linkTo(methodOn(MovieCatalogController.class).allMovies()).withSelfRel());
+        return models;
     }
 }

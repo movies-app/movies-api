@@ -32,7 +32,13 @@ public class MovieCatalogServiceImpl implements MovieCatalogService {
     @Override
     @Transactional(readOnly = true)
     public Movie getMovie(Long id) {
-        return null;
+        return this.movieRepository.findById(id).orElseThrow();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Movie getMovieByTitle(String title) {
+        return this.movieRepository.findMovieByTitle(title).orElseThrow();
     }
 
     @Override
@@ -53,5 +59,14 @@ public class MovieCatalogServiceImpl implements MovieCatalogService {
                 .orElseThrow();
     }
 
-
+    @Override
+    @Transactional
+    public Movie newMovie(Movie movie) {
+        var movieEntity = this.movieRepository.findMovieByTitle(movie.getTitle());
+        if(!movieEntity.isPresent()) {
+            var newMovie = this.movieRepository.save(movie);
+            return newMovie;
+        }
+        throw new RuntimeException("Movie with title: "+ movie.getTitle() +" already exists");
+    }
 }

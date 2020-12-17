@@ -1,0 +1,52 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-test-data
+      author: martin.flores
+      changes:
+        - insert:
+            catalogName: moviecatalog
+            tableName: movie
+            dbms:  'h2, mysql, postgresql'
+            columns:
+              - column:
+                  name: id
+                  value: 1
+              - column:
+                  name: title
+                  value: "Thor"
+              - column:
+                  name: release_date
+                  value: "2020-02-17 23:40:34"
+        - insert:
+            catalogName: moviecatalog
+            tableName: movie
+            dbms:  'h2, mysql, postgresql'
+            columns:
+              - column:
+                  name: id
+                  value: 2
+              - column:
+                  name: title
+                  value: "Ant-Man"
+              - column:
+                  name: release_date
+                  value: "2020-02-17 23:40:34"
+        - insert:
+            catalogName: moviecatalog
+            tableName: movie
+            dbms:  'h2, mysql, postgresql'
+            columns:
+              - column:
+                  name: id
+                  value: 3
+              - column:
+                  name: title
+                  value: "Captain America"
+              - column:
+                  name: release_date
+                  value: "2020-02-17 23:40:34"
+
+
+#insert into movie(id, title, release_date) values (1, 'Thor', '2020-02-17 23:40:34');
+#insert into movie(id, title, release_date) values (2, 'Ant-Man', '2020-02-17 23:40:34');
+#insert into movie(id, title, release_date) values (3, 'Captain America', '2020-02-17 23:40:34');

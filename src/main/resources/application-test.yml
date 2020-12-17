@@ -1,0 +1,18 @@
+
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:h2:mem:moviecatalog;MODE=MySQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: sa
+    platform: h2
+#    initialization-mode: embedded
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-test.yml
+    user: sa
+    password: sa
+    drop-first: true

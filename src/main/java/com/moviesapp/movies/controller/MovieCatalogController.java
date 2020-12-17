@@ -2,16 +2,18 @@ package com.moviesapp.movies.controller;
 
 import com.moviesapp.movies.assembler.MovieModel;
 import com.moviesapp.movies.assembler.MovieModelAssembler;
+import com.moviesapp.movies.entity.Movie;
 import com.moviesapp.movies.service.MovieCatalogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/movies")
@@ -34,6 +36,16 @@ public class MovieCatalogController {
         var movies = this.movieCatalogService.getAllMovieCatalog();
         var resource = this.assembler.toCollectionModel(movies);
         return ResponseEntity.ok(resource);
+    }
+
+    @PostMapping
+    public ResponseEntity<MovieModel> addNewMovieToCatalog(@Valid @RequestBody Movie movie){
+        LOG.debug("Adding new movie to catalog");
+        var newMovie = this.movieCatalogService.newMovie(movie);
+        var resource = this.assembler.toModel(newMovie);
+        URI location =
+                ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newMovie.getId()).toUri();
+        return ResponseEntity.created(location).body(resource);
     }
 
     @GetMapping("/{id:\\d+}")

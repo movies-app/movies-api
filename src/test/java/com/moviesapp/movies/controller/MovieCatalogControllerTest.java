@@ -20,12 +20,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Calendar;
 import java.util.List;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.mockito.BDDMockito.*;
@@ -59,7 +61,7 @@ public class MovieCatalogControllerTest {
 
         Movie movie = mock(Movie.class);
         MovieModel movieModel = new MovieModel();
-        movieModel.setId(1L);
+        movieModel.setMovieId(1L);
         movieModel.setTitle("Avengers: Infinity Wars");
         movieModel.add(Link.of("http://localhost:8080/movies/1").withSelfRel());
         ArgumentCaptor<Movie> movieArg = ArgumentCaptor.forClass(Movie.class);
@@ -81,8 +83,8 @@ public class MovieCatalogControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/hal+json"))
                 .andExpect(jsonPath("$._links.self.href").value("http://localhost:8080/movies/1"))
-                .andExpect(jsonPath("$.id").value("1"))
-                .andExpect(jsonPath(".title").value("Avengers: Infinity Wars"))
+                .andExpect(jsonPath("$.movieId").value("1"))
+                .andExpect(jsonPath("$.title").value("Avengers: Infinity Wars"))
                 .andDo(document("{class-name}/get-movie-by-id"));
 
         verify(this.movieCatalogService, times(1)).getMovie(1L);
@@ -101,15 +103,15 @@ public class MovieCatalogControllerTest {
         MovieModel ironman = new MovieModel();
         MovieModel blackPanther = new MovieModel();
 
-        avengers.setId(1L);
+        avengers.setMovieId(1L);
         avengers.setTitle("Avengers: Infinity Wars");
         avengers.add(Link.of("http://localhost:8080/movies/1").withSelfRel());
 
-        ironman.setId(2L);
+        ironman.setMovieId(2L);
         ironman.setTitle("Ironman");
         ironman.add(Link.of("http://localhost:8080/movies/2").withSelfRel());
 
-        blackPanther.setId(3L);
+        blackPanther.setMovieId(3L);
         blackPanther.setTitle("Black Panther");
         blackPanther.add(Link.of("http://localhost:8080/movies/3").withSelfRel());
 
@@ -126,12 +128,53 @@ public class MovieCatalogControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/hal+json"))
                 .andExpect(jsonPath("$._links.self.href").value("http://localhost:8080/movies"))
-                .andExpect(jsonPath("$._embedded").exists())
+                .andExpect(jsonPath("$._embedded.movies").exists())
                 .andDo(document("{class-name}/get-all-movie-in-catalog"));
 
         verify(this.movieCatalogService, times(1)).getAllMovieCatalog();
         verify(this.assembler, times(1)).toCollectionModel(moviesArg.capture());
 
         assertThat(moviesArg.getValue()).isEqualTo(List.of(movie, movie, movie));
+    }
+
+    @Test
+    void addNewMovieToCatalog() throws Exception{
+
+        Movie newMovie = mock(Movie.class);
+        ArgumentCaptor<Movie> movieArg = ArgumentCaptor.forClass(Movie.class);
+        Calendar cal = Calendar.getInstance();
+        cal.set(2020, 11, 16, 11, 11, 11);
+
+        MovieModel avengers = new MovieModel();
+        avengers.setMovieId(1L);
+        avengers.setTitle("Avengers: Infinity Wars");
+        avengers.setReleaseDate(cal.getTime());
+        avengers.add(Link.of("http://localhost:8080/movies/1").withSelfRel());
+
+        given(newMovie.getId()).willReturn(1L);
+        given(this.movieCatalogService.newMovie(any(Movie.class))).willReturn(newMovie);
+        given(this.assembler.toModel(any(Movie.class))).willReturn(avengers);
+
+        this.mockMvc.perform(
+                post("/movies")
+                        .header("Content-Type", "application/json")
+                        .content("{" +
+                                "\"title\":\"Avengers: Infinity Wars\"," +
+                                "\"releaseDate\":\"2020-12-16T17:11:11.624+00:00\"" +
+                                "}"))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType("application/hal+json"))
+                .andExpect(header().string("location", "http://localhost:8080/movies/1"))
+                .andExpect(jsonPath("$._links.self.href").value("http://localhost:8080/movies/1"))
+                .andExpect(jsonPath("$.movieId").value("1"))
+                .andExpect(jsonPath("$.title").value("Avengers: Infinity Wars"))
+                .andDo(document("{class-name}/new-movie-in-catalog"));
+
+        verify(this.movieCatalogService, times(1)).newMovie(movieArg.capture());
+        verify(this.assembler, times(1)).toModel(movieArg.capture());
+
+        assertThat(movieArg.getAllValues().get(0).getTitle()).isEqualTo("Avengers: Infinity Wars");
+        assertThat(movieArg.getAllValues().get(1)).isEqualTo(newMovie);
     }
 }
