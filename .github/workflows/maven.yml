@@ -41,10 +41,10 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
     - name: Build Docker image
-      run: mvn spring-boot:build-image -Dmaven.test.skip=true
+      run: mvn spring-boot:build-image -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_HUB_REPO }}:0.0.1-SNAPSHOT -Dmaven.test.skip=true
 
-    - name: Tag image
-      run: docker tag movies-api:0.0.1-SNAPSHOT ${{ secrets.DOCKER_HUB_REPO }}/movies-api:0.0.1-SNAPSHOT
+#    - name: Tag image
+#      run: docker tag ${{ secrets.DOCKER_HUB_REPO }}:0.0.1-SNAPSHOT ${{ secrets.DOCKER_HUB_REPO }}:0.0.1-SNAPSHOT
 
     - name: Publish Docker image
-      run: docker push ${{ secrets.DOCKER_HUB_REPO }}/movies-api:0.0.1-SNAPSHOT
+      run: docker push ${{ secrets.DOCKER_HUB_REPO }}:0.0.1-SNAPSHOT

@@ -11,7 +11,7 @@
 	<groupId>com.moviesapp.movies</groupId>
 	<artifactId>movies-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>movies-api</name>
+	<name>Movies-API</name>
 	<description>Simple REST API for movie data management</description>
 
 	<properties>
@@ -136,7 +136,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<name>movies-api:${project.version}</name>
+						<name>${project.artifactId}:${project.version}</name>
 					</image>
 				</configuration>
 			</plugin>
