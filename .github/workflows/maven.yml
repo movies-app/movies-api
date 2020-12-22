@@ -30,7 +30,7 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
-      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
+      run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml -Dmaven.test.skip=true
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
@@ -40,5 +40,8 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USER }}
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
-#    - name: Build Docker image
-#      run: mvn spring-boot:build-image -Dmaven.test.skip=true
+    - name: Build Docker image
+      run: mvn spring-boot:build-image -Dmaven.test.skip=true
+
+    - name: List docker images
+      run: docker images
