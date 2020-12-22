@@ -134,11 +134,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-<!--				<configuration>-->
-<!--					<image>-->
-<!--						<name>martinicr.movies-api</name>-->
-<!--					</image>-->
-<!--				</configuration>-->
+				<configuration>
+					<image>
+						<name>martinicr/movies-api:${project.version}</name>
+					</image>
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -170,10 +170,6 @@
 						<version>${spring-restdocs.version}</version>
 					</dependency>
 				</dependencies>
-			</plugin>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
 			<plugin>
