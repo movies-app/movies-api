@@ -44,7 +44,7 @@ jobs:
       run: mvn spring-boot:build-image -Dmaven.test.skip=true
 
     - name: Tag image
-      run: docker tag movies-api:0.0.1-SNAPSHOT ${{ secrets.DOCKER_REPO }}/movies-api:0.0.1-SNAPSHOT
+      run: docker tag movies-api:0.0.1-SNAPSHOT ${{ secrets.DOCKER_HUB_REPO }}/movies-api:0.0.1-SNAPSHOT
 
     - name: Publish Docker image
       run: docker push ${{ secrets.DOCKER_HUB_REPO }}/movies-api:0.0.1-SNAPSHOT
