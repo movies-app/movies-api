@@ -6,15 +6,15 @@ spring:
       hibernate.dialect: org.hibernate.dialect.MySQL5Dialect
     hibernate:
       ddl-auto: update
-  datasource:
-    url: jdbc:mysql://localhost:3306/moviecatalog
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: movieapi_user
-    password: movieapi_pass
-    platform: mysql
-  liquibase:
-    user: lbmovieapi_user
-    password: lbmovieapi_pass
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/moviecatalog
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    username: movieapi_user
+#    password: movieapi_pass
+#    platform: mysql
+#  liquibase:
+#    user: lbmovieapi_user
+#    password: lbmovieapi_pass
 
 management:
   endpoints:
