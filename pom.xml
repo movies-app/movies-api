@@ -136,7 +136,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
 					<image>
-						<name>martinicr/movies-api:${project.version}</name>
+						<name>movies-api:${project.version}</name>
 					</image>
 				</configuration>
 			</plugin>
