@@ -19,7 +19,7 @@ import java.net.URI;
 @RequestMapping("/movies")
 public class MovieCatalogController {
 
-    private final static Logger LOG = LoggerFactory.getLogger(MovieCatalogController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MovieCatalogController.class);
 
     private final MovieCatalogService movieCatalogService;
     private final MovieModelAssembler assembler;
