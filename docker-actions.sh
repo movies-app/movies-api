@@ -36,6 +36,7 @@ mvn spring-boot:build-image -Dspring-boot.build-image.imageName=$1:$2 -Dmaven.te
 
 echo "== Docker Tag =="
 docker tag $1:$2 $1:$2
+docker images
 
 echo "== Docker Push"
 docker push $1:$2
