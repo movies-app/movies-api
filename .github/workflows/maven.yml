@@ -95,9 +95,7 @@ jobs:
 
     - name: Build And Push Docker image
       run: |
-        bash docker-actions.sh build ${{ secrets.DOCKER_HUB_REPO }}
-        bash docker-actions.sh tag ${{ secrets.DOCKER_HUB_REPO }}
-        bash docker-actions.sh push ${{ secrets.DOCKER_HUB_REPO }}
+        bash docker-actions.sh ${{ secrets.DOCKER_HUB_REPO }}
 
 
 #
