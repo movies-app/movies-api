@@ -28,17 +28,17 @@ echo "== Docker =="
 echo "Repo: $1"
 echo "Version: $POM_VERSION"
 
-#case $1 in
-#build)
-#  dockerBuild $2 $POM_VERSION
-#  ;;
-#tag)
-#  dockerTag $2 $POM_VERSION
-#  ;;
-#push)
-#  dockerPush $2 $POM_VERSION
-#  ;;
-#*)
-#  echo "Unknown command"
-#  ;;
-#esac
+case $1 in
+build)
+  dockerBuild $2 $POM_VERSION
+  ;;
+tag)
+  dockerTag $2 $POM_VERSION
+  ;;
+push)
+  dockerPush $2 $POM_VERSION
+  ;;
+*)
+  echo "Unknown command"
+  ;;
+esac
