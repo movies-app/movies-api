@@ -135,4 +135,30 @@ public class MovieCatalogServiceImplTest {
         assertThat(ex.getMessage()).isEqualTo("Movie with title: "+ title +" already exists");
     }
 
+    @Test
+    void getMovie_whenMovieIdIsValid_thenReturnMovie() {
+        Movie movie = mock(Movie.class);
+
+        given(this.movieRepository.findById(anyLong())).willReturn(Optional.of(movie));
+
+        var actual = this.movieCatalogService.getMovie(1L);
+
+        verify(this.movieRepository, times(1)).findById(anyLong());
+
+        assertThat(actual).isSameAs(movie);
+    }
+
+    @Test
+    void getMovieByTitle_whenTitleIsFound_thenReturnMovie() {
+        Movie movie = mock(Movie.class);
+
+        given(this.movieRepository.findMovieByTitle(anyString())).willReturn(Optional.of(movie));
+
+        var actual = this.movieCatalogService.getMovieByTitle("Thor");
+
+        verify(this.movieRepository, times(1)).findMovieByTitle(anyString());
+
+        assertThat(actual).isSameAs(movie);
+    }
+
 }

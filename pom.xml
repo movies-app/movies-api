@@ -23,11 +23,10 @@
 		<testcontainers.version>1.15.0</testcontainers.version>
 
 
-		<aggregate.report.dir>target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
 		<sonar.projectKey>movies-app_movies-api</sonar.projectKey>
 		<sonar.organization>movies-app</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-		<sonar.coverage.jacoco.xmlReportPaths>${basedir}/${aggregate.report.dir}</sonar.coverage.jacoco.xmlReportPaths>
+		<sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
 	<dependencies>
@@ -209,34 +208,13 @@
 				</executions>
 			</plugin>
 
-
-<!--			<plugin>-->
-<!--				<groupId>org.jacoco</groupId>-->
-<!--				<artifactId>jacoco-maven-plugin</artifactId>-->
-<!--				<version>0.8.0</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<id>default-prepare-agent</id>-->
-<!--						<goals>-->
-<!--							<goal>prepare-agent</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--					<execution>-->
-<!--						<id>default-report</id>-->
-<!--						<phase>prepare-package</phase>-->
-<!--						<goals>-->
-<!--							<goal>report</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
-
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.5</version>
 				<executions>
 					<execution>
+						<id>prepare-agent</id>
 						<goals>
 							<goal>prepare-agent</goal>
 						</goals>
@@ -245,7 +223,7 @@
 						<id>report</id>
 						<phase>verify</phase>
 						<goals>
-							<goal>report-aggregate</goal>
+							<goal>report</goal>
 						</goals>
 					</execution>
 					<execution>
@@ -258,7 +236,7 @@
 								<rule>
 									<limits>
 										<limit>
-											<minimum>0.5</minimum>
+											<minimum>0.9</minimum>
 										</limit>
 									</limits>
 								</rule>
@@ -267,6 +245,27 @@
 					</execution>
 				</executions>
 			</plugin>
+
+<!--			<plugin>-->
+<!--				<groupId>org.jacoco</groupId>-->
+<!--				<artifactId>jacoco-maven-plugin</artifactId>-->
+<!--				<version>0.8.5</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<goals>-->
+<!--							<goal>prepare-agent</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--					<execution>-->
+<!--						<id>report</id>-->
+<!--&lt;!&ndash;						<phase>verify</phase>&ndash;&gt;-->
+<!--						<goals>-->
+<!--							<goal>report-aggregate</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+
+<!--				</executions>-->
+<!--			</plugin>-->
 
 		</plugins>
 	</build>
