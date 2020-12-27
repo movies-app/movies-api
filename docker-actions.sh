@@ -25,23 +25,20 @@ set -euo pipefail
 
 #ARTIFACT_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.artifactId | grep -v '\[')
 #POM_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v '\[')
-ARTIFACT_ID=movies-api
-POM_VERSION=1.0.0-SNAPSHOT
+#ARTIFACT_ID=movies-api
+#POM_VERSION=0.0.1-SNAPSHOT
 echo "== Docker =="
-echo "Repo: $1"
-echo "Artifact: $ARTIFACT_ID"
-echo "Version: $POM_VERSION"
+echo "DockerHub Repo: $1"
+echo "Version: $2"
 
 echo "== Docker Build =="
-mvn spring-boot:build-image -Dspring-boot.build-image.imageName=$1:$POM_VERSION -Dmaven.test.skip=true
+mvn spring-boot:build-image -Dspring-boot.build-image.imageName=$1:$2 -Dmaven.test.skip=true
 
 echo "== Docker Tag =="
-echo "docker tag $ARTIFACT_ID:$POM_VERSION $1:$POM_VERSION"
-docker tag $ARTIFACT_ID:$POM_VERSION $1:$POM_VERSION
+docker tag $1:$2 $1:$2
 
 echo "== Docker Push"
-echo "docker push $1:$POM_VERSION"
-docker push $1:$POM_VERSION
+docker push $1:$2
 
 
 #case $1 in

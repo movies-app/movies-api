@@ -101,8 +101,10 @@ jobs:
         password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
     - name: Build And Push Docker image
+      shell: bash
       run: |
-        bash docker-actions.sh ${{ secrets.DOCKER_HUB_REPO }}
+        POM_VERSION=$(mvn help:evaluate -Dexpression=project.version | grep -v '\[')
+        bash docker-actions.sh ${{ secrets.DOCKER_HUB_REPO }} POM_VERSION
 
 
 #
