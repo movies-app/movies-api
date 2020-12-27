@@ -104,7 +104,7 @@ jobs:
       shell: bash
       run: |
         POM_VERSION=$(mvn help:evaluate -Dexpression=project.version | grep -v '\[')
-        bash docker-actions.sh ${{ secrets.DOCKER_HUB_REPO }} POM_VERSION
+        bash docker-actions.sh ${{ secrets.DOCKER_HUB_REPO }} $POM_VERSION
 
 
 #
