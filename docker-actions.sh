@@ -23,8 +23,10 @@ set -euo pipefail
 #  docker push $1:$2
 #}
 
-ARTIFACT_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.artifactId | grep -v '\[')
-POM_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v '\[')
+#ARTIFACT_ID=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.artifactId | grep -v '\[')
+#POM_VERSION=$(mvn org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=project.version | grep -v '\[')
+ARTIFACT_ID=movies-api
+POM_VERSION=1.0.0-SNAPSHOT
 echo "== Docker =="
 echo "Repo: $1"
 echo "Artifact: $ARTIFACT_ID"
