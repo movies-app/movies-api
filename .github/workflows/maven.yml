@@ -77,11 +77,19 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ github.token }}
 
-#    - name: Login to DockerHub
-#      uses: docker/login-action@v1
-#      with:
-#        username: ${{ secrets.DOCKER_HUB_USER }}
-#        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKER_HUB_USER }}
+        password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+    - name: Build And Push Docker image
+      run: |
+        ./docker-actions.sh build ${{ secrets.DOCKER_HUB_REPO }}
+        ./docker-actions.sh tag ${{ secrets.DOCKER_HUB_REPO }}
+        ./docker-actions.sh push ${{ secrets.DOCKER_HUB_REPO }}
+
+
 #
 #    - name: Build Docker image
 #      run: mvn spring-boot:build-image -Dspring-boot.build-image.imageName=${{ secrets.DOCKER_HUB_REPO }}:0.0.1-SNAPSHOT -Dmaven.test.skip=true
