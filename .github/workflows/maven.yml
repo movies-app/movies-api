@@ -103,8 +103,9 @@ jobs:
     - name: Build And Push Docker image
       shell: bash
       run: |
+        ARTIFACT_ID=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout | grep -v '\[')
         POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | grep -v '\[')
-        bash docker-actions.sh ${{ secrets.DOCKER_HUB_REPO }} $POM_VERSION
+        bash docker-actions.sh $ARTIFACT_ID $POM_VERSION ${{ secrets.DOCKER_HUB_REPO }}
 
 
 #
