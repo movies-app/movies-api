@@ -34,9 +34,11 @@ echo "== Docker Build =="
 mvn spring-boot:build-image -Dspring-boot.build-image.imageName=$1:$POM_VERSION -Dmaven.test.skip=true
 
 echo "== Docker Tag =="
+echo "docker tag $ARTIFACT_ID:$POM_VERSION $1:$POM_VERSION"
 docker tag $ARTIFACT_ID:$POM_VERSION $1:$POM_VERSION
 
 echo "== Docker Push"
+echo "docker push $1:$POM_VERSION"
 docker push $1:$POM_VERSION
 
 
