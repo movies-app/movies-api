@@ -63,7 +63,7 @@ jobs:
 
   artifact:
     runs-on: ubuntu-latest
-    needs: [build, code-analysis]
+    needs: [build]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
@@ -79,7 +79,7 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
-    needs: [build, code-analysis, artifact]
+    needs: [build, artifact]
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 11
