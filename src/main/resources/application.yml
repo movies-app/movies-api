@@ -3,6 +3,8 @@ logging:
     "liquibase" : debug
 
 spring:
+  application:
+    name: movie-catalog
   data:
     jpa:
       repositories:
@@ -14,29 +16,31 @@ spring:
     hibernate:
       ddl-auto: validate
   datasource:
-    url: jdbc:h2:mem:moviecatalog;MODE=MySQL;DB_CLOSE_DELAY=-1
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: sa
-    platform: h2
-  #    initialization-mode: embedded
+#    DB username and password is provided via env variables
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    platform: mysql
   liquibase:
-    change-log: classpath:/db/changelog/db.changelog-test.yml
-    user: sa
-    password: sa
+#    DB username and password is provided via env variables
+    change-log: classpath:/db/changelog/db.changelog-master.yml
     url: ${spring.datasource.url}
     enabled: true
-#  liquibase:
-#    change-log: classpath:/db/changelog/db.changelog-master.yml
-#    url: jdbc:h2:mem:moviecatalog;MODE=MySQL;DB_CLOSE_DELAY=-1
-#    url: ${spring.datasource.url}
-#    enabled: true
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
 
 management:
   info:
     git:
       mode: full
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
+eureka:
+  client:
+    initial-instance-info-replication-interval-seconds: 5
+    registry-fetch-interval-seconds: 5
+    serviceUrl:
+      defaultZone: http://eureka:8761/eureka/
+  instance:
+    lease-expiration-duration-in-seconds: 5
+    lease-renewal-interval-in-seconds: 5
